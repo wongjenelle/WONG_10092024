@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
 
-namespace UpStreamer.Server.Features.Video.Handlers
+namespace UpStreamer.Server.Features.Videos.Handlers
 {
-    public class GetVideos : Controller
+    public class GetVideosQuery() : IRequest<string>
     {
-        public IActionResult Index()
+    }
+
+    public class GetVideosHandler : IRequestHandler<GetVideosQuery, string>
+    {
+        public async Task<string> Handle(GetVideosQuery query, CancellationToken cancellationToken)
         {
-            return View();
+            return "hello";
         }
     }
 }
