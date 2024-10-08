@@ -12,6 +12,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddDbContext<UpStreamerDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true); 
+builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
+    builder
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .WithOrigins("http://localhost:4200", "other domains");
+}));
 
 var app = builder.Build();
 

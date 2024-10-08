@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace UpStreamer.Server.Features.Video.Handlers
+namespace UpStreamer.Server.Features.Videos.Handlers
 {
     public class StreamVideo : Controller
     {
