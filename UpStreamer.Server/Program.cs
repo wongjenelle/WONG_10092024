@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 using UpStreamer.Server.Database;
+using UpStreamer.Server.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,16 +9,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
 builder.Services.AddDbContext<UpStreamerDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true); 
-builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
-    builder
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .WithOrigins("http://localhost:4200", "other domains");
-}));
+builder.Services.ConfigureServices();
 
 var app = builder.Build();
 
@@ -31,6 +25,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(x => x.AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithOrigins("http://localhost:4200")); //TODO: appsettings
 
 app.UseHttpsRedirection();
 
