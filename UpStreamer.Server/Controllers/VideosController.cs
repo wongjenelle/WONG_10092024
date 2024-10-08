@@ -21,14 +21,18 @@ namespace UpStreamer.Server.Controllers
             return $"hello {id}";
         }
 
-        [HttpPost("upload")]
+        [HttpPost("upload"), DisableRequestSizeLimit] //todo mitigate
         public async Task<IActionResult> Upload()
         {
-            var file = Request.Form.Files;
+            await mediator.Send(new UploadVideoCommand(Request.Form.Files));
+            return Ok();
+        }
 
-            var result = await mediator.Send(new UploadVideoCommand(file));
-
-            return Ok(result);
+        [HttpPost("Create")] //todo mitigate
+        public async Task<IActionResult> Post()
+        {
+            await mediator.Send(new UploadVideoCommand(Request.Form.Files));
+            return Ok();
         }
     }
 }
