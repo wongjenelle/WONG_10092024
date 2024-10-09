@@ -1,16 +1,20 @@
 ﻿using MediatR;
+using UpStreamer.Server.Common.DTOs;
+using UpStreamer.Server.Features.Videos.DTOs;
 
 namespace UpStreamer.Server.Features.Videos.Handlers
 {
-    public class GetVideosQuery() : IRequest<string>
+    public class GetVideosQuery(PagedDto request) : IRequest<GetVideosResponse>
     {
+        public PagedDto PagedParameters { get; private set; } = request;
+
     }
 
-    public class GetVideosHandler : IRequestHandler<GetVideosQuery, string>
+    public class GetVideosHandler : IRequestHandler<GetVideosQuery, GetVideosResponse>
     {
-        public async Task<string> Handle(GetVideosQuery query, CancellationToken cancellationToken)
+        public async Task<GetVideosResponse> Handle(GetVideosQuery query, CancellationToken cancellationToken)
         {
-            return "hello";
+            return new();
         }
     }
 }

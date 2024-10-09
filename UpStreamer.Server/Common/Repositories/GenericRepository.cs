@@ -32,13 +32,11 @@ namespace UpStreamer.Server.Common.Repository
         public void Update(TEntity entity)
         {
             _context.Set<TEntity>().Update(entity);
-            _context.SaveChanges();
         }
 
         public void Delete(TEntity entity)
         {
             _context.Set<TEntity>().Remove(entity);
-            _context.SaveChanges();
         }
 
         public void Save()
