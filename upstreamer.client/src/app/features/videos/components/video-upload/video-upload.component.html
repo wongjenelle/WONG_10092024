@@ -1,11 +1,12 @@
 <div class="mx-12">
-  <h4>Upload New Video</h4>
-  
-  <app-create-form></app-create-form>
-  <app-uploader [formData]="uploadedFile"></app-uploader>
+  <p class="text-2xl">UPLOAD VIDEO</p>
+
+  <app-create-form [videoForm]="createRequest"></app-create-form>
+  <app-uploader (fileSelectedEvent)="setFile($event)"></app-uploader>
 
   <div class="flex items-start">    
-    <button mat-flat-button (click)="submit()">Submit</button> <!-- TODO: disable if not valid-->  
+    <button mat-flat-button [disabled]="!createRequest.valid || !file" 
+      (click)="submit()">Submit</button> 
     <button mat-flat-button class="ml-3" (click)="cancel()">Cancel</button>  
   </div>
 </div>

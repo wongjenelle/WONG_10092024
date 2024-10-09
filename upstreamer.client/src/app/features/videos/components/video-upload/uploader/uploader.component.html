@@ -1,8 +1,8 @@
 
 <div class="flex items-start mb-5">    
-  <button class="col-span-1" type="button" color="secondary" mat-flat-button (click)="fileInput.click()">Choose File</button>
-  <input hidden (change)="onFileSelected($event)" #fileInput type="file"> <!--accept="{{extensions}}"> -->
-  <span class="ml-5">{{fileName}}</span>
+  <button class="col-span-1" type="button" mat-flat-button (click)="fileInput.click()">Choose File</button>
+  <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept="{{extensions}}">
+  <span class="ml-5 my-auto">{{fileName}}</span>
   <span class="flex-auto"></span>
   <span>{{ message }}</span>
 </div>

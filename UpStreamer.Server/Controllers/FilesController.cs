@@ -15,8 +15,7 @@ namespace UpStreamer.Server.Controllers
         [HttpPost, DisableRequestSizeLimit] //todo mitigate
         public async Task<IActionResult> Upload()
         {
-            await mediator.Send(new UploadFileCommand(Request.Form.Files));
-            return Ok();
+            return Ok(await mediator.Send(new UploadFileCommand(Request.Form.Files)));
         }
     }
 }

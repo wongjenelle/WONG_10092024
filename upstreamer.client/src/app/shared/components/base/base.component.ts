@@ -6,14 +6,13 @@ import { Subject } from 'rxjs';
   selector: 'app-base',
   standalone: true,
   template: '',
-  styles: ''
+  styles: '',
 })
-
 export abstract class BaseComponent implements OnDestroy {
-  public ngDestroyed$ = new Subject();
+  protected unsubscribe$ = new Subject();
 
   ngOnDestroy() {
-    this.ngDestroyed$.next(null);
-    this.ngDestroyed$.unsubscribe();
+    this.unsubscribe$.next(null);
+    this.unsubscribe$.unsubscribe();
   }
 }

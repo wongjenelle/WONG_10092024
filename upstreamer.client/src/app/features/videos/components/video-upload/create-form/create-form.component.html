@@ -1,18 +1,18 @@
 
 
-<form>
+<form *ngIf="videoForm" [formGroup]="videoForm">
   <div class="grid grid-cols-3 gap-3">
     <mat-form-field class="col-span-2">
       <mat-label>Title</mat-label>
-      <input matInput value="">
+      <input matInput formControlName="title">
     </mat-form-field>
     <mat-form-field >
       <mat-label>Category</mat-label>
-      <input matInput value="">
+      <input matInput formControlName="category">
     </mat-form-field>
     <mat-form-field class="col-span-3">
       <mat-label>Description</mat-label>
-      <textarea matInput value=""></textarea>
+      <textarea matInput formControlName="description" maxlength="255"></textarea>
     </mat-form-field>
   </div>
 </form>

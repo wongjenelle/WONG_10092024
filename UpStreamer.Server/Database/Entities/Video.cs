@@ -14,8 +14,6 @@ namespace UpStreamer.Server.Database.Entities
         public string? Description { get; set; }
         [MaxLength(255)]
         public string? FilePath { get; set; }
-        [MaxLength(100)]
-        public string? DisplayFileName { get; set; }
         public int? CategoryId { get; set; }
         public Category? Category { get; set; }
     }

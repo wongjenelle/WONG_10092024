@@ -2,6 +2,7 @@
 using MediatR;
 using UpStreamer.Server.Common.Extensions;
 using UpStreamer.Server.Features.Files.Constants;
+using UpStreamer.Server.Features.Videos.DTOs;
 
 namespace UpStreamer.Server.Features.Files.Handlers
 {
@@ -25,14 +26,14 @@ namespace UpStreamer.Server.Features.Files.Handlers
         }
     }
 
-    public class UploadFileCommand(IFormFileCollection files) : IRequest<string>
+    public class UploadFileCommand(IFormFileCollection files) : IRequest<UploadFileResponse>
     {
         public IFormFileCollection Files { get; private set; } = files;
     }
 
-    public class UploadFileHandler() : IRequestHandler<UploadFileCommand, string>
+    public class UploadFileHandler() : IRequestHandler<UploadFileCommand, UploadFileResponse>
     {
-        public async Task<string> Handle(UploadFileCommand command, CancellationToken cancellationToken)
+        public async Task<UploadFileResponse> Handle(UploadFileCommand command, CancellationToken cancellationToken)
         {
             var file = command!.Files![0];
 
@@ -49,8 +50,7 @@ namespace UpStreamer.Server.Features.Files.Handlers
                 command.Files[0].CopyTo(stream);
             }
 
-            var filePath = Path.Combine(FilesConstants.FOLDER_UPLOAD, fileName);
-            return filePath;
+            return new() { FilePath = Path.Combine(FilesConstants.FOLDER_UPLOAD, fileName) };
         }
     }
 }
