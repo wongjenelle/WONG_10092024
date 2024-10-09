@@ -28,19 +28,35 @@ namespace UpStreamer.Test.Features.Videos.Handlers
         }
 
         [Fact]
-        public void When_CreateRequestHasInvalidData_Return_ValidationError()
+        public void When_CreateRequestHasExceededTextLimit_Return_ValidationError()
         {
             var request = new CreateVideoRequest
             {
-                Title = "",
+                Title = new string('A', 101),
                 Description = new string('A', 161),
                 Category = "Category"
             };
 
             var result = new CreateVideoValidator().TestValidate(new CreateVideoCommand(request));
             result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor(x => x.Request.Title);
+            result.ShouldHaveValidationErrorFor(x => x.Request.Title.Length);
             result.ShouldHaveValidationErrorFor(x => x.Request.Description.Length);
+        }
+
+        [Fact]
+        public void When_CreateRequestHasEmptyTitle_Return_ValidationError()
+        {
+            var request = new CreateVideoRequest
+            {
+                Title = "",
+                Description = new string('A', 160),
+                Category = "Category"
+            };
+
+            var result = new CreateVideoValidator().TestValidate(new CreateVideoCommand(request));
+            result.IsValid.Should().BeFalse();
+            result.ShouldHaveValidationErrorFor(x => x.Request.Title);
+            result.ShouldNotHaveValidationErrorFor(x => x.Request.Description.Length);
         }
 
         [Theory]

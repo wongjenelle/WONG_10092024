@@ -1,6 +1,8 @@
 ﻿
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using UpStreamer.Server.Database;
 using UpStreamer.Server.Features.Files.Handlers;
 using UpStreamer.Server.Infrastructure.Middleware;
 
@@ -16,6 +18,16 @@ namespace UpStreamer.Server.Infrastructure
             });
             services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
             services.AddValidatorsFromAssemblyContaining<UploadFileValidator>();
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureDatabase(this IServiceCollection services, string? connectionString)
+        {
+            ArgumentNullException.ThrowIfNull(connectionString);
+
+            services.AddDbContext<UpStreamerDbContext>(opt => opt.UseNpgsql(connectionString));
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             return services;
         }

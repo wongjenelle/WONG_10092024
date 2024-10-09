@@ -2,6 +2,7 @@
 using MediatR;
 using UpStreamer.Server.Database;
 using UpStreamer.Server.Entities;
+using UpStreamer.Server.Features.Videos.Constants;
 using UpStreamer.Server.Features.Videos.DTOs;
 
 namespace UpStreamer.Server.Features.Videos.Handlers
@@ -10,8 +11,12 @@ namespace UpStreamer.Server.Features.Videos.Handlers
     {
         public CreateVideoValidator()
         {
-            RuleFor(x => x.Request.Title).NotEmpty();
-            RuleFor(x => x.Request.Description.Length).LessThan(160);
+            RuleFor(x => x.Request.Title).NotEmpty()
+               .WithMessage("Video title is required!");
+            RuleFor(x => x.Request.Title.Length).LessThanOrEqualTo(VideosConstants.MAXSIZE_TITLE)
+               .WithMessage("Description must not exceed 100 characters!");
+            RuleFor(x => x.Request.Description.Length).LessThanOrEqualTo(VideosConstants.MAXSIZE_DESCRIPTION)
+                .WithMessage("Description must not exceed 160 characters!");
         }
     }
 
