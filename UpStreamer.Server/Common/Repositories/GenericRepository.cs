@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using UpStreamer.Server.Database;
 
@@ -24,9 +25,15 @@ namespace UpStreamer.Server.Common.Repository
             return await _context.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
 
-        public IQueryable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate, int skip, int offset)
+        public IQueryable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate, 
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? includes = null)
         {
-            return _context.Set<TEntity>().Where(predicate).AsNoTracking();
+            if(includes == null)
+            {
+                _context.Set<TEntity>().Where(predicate).AsNoTracking();
+            }
+
+            return includes!(_context.Set<TEntity>()).Where(predicate).AsNoTracking();
         }
 
         public void Update(TEntity entity)

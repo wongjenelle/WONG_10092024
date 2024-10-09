@@ -3,6 +3,7 @@
     public class GetVideosResponse
     {
         public List<GetVideosObject> Videos { get; init; }
+        public int Total { get; init; }
     }
 
     public class GetVideosObject
