@@ -26,14 +26,14 @@ namespace UpStreamer.Server.Features.Files.Handlers
         }
     }
 
-    public class UploadFileCommand(IFormFileCollection files) : IRequest<UploadFileResponse>
+    public class UploadFileCommand(IFormFileCollection files) : IRequest<UploadFileResponseDto>
     {
         public IFormFileCollection Files { get; private set; } = files;
     }
 
-    public class UploadFileHandler() : IRequestHandler<UploadFileCommand, UploadFileResponse>
+    public class UploadFileHandler() : IRequestHandler<UploadFileCommand, UploadFileResponseDto>
     {
-        public async Task<UploadFileResponse> Handle(UploadFileCommand command, CancellationToken cancellationToken)
+        public async Task<UploadFileResponseDto> Handle(UploadFileCommand command, CancellationToken cancellationToken)
         {
             var file = command!.Files![0];
 

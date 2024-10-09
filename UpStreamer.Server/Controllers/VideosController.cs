@@ -15,7 +15,7 @@ namespace UpStreamer.Server.Controllers
         /// </summary>
         /// <returns>List of video metadata with pagination</returns>
         [HttpGet("list")]
-        public async Task<GetVideosResponse> GetPaged(PagedDto pagedParameters)
+        public async Task<GetVideosResponseDto> GetPaged([FromQuery] PagedDto pagedParameters)
         {
             return await mediator.Send(new GetVideosQuery(pagedParameters));
         }
@@ -37,7 +37,7 @@ namespace UpStreamer.Server.Controllers
         /// <param name="request"></param>
         /// <returns>ID of the created video</returns>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateVideoRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateVideoRequestDto request)
         {
             return Ok(await mediator.Send(new CreateVideoCommand(request)));
         }

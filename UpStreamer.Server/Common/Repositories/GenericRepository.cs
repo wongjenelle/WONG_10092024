@@ -25,15 +25,15 @@ namespace UpStreamer.Server.Common.Repository
             return await _context.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
 
-        public IQueryable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate, 
+        public List<TEntity> GetList(Expression<Func<TEntity, bool>> predicate, 
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? includes = null)
         {
             if(includes == null)
             {
-                _context.Set<TEntity>().Where(predicate).AsNoTracking();
+                return _context.Set<TEntity>().Where(predicate).AsNoTracking().ToList();
             }
 
-            return includes!(_context.Set<TEntity>()).Where(predicate).AsNoTracking();
+            return includes!(_context.Set<TEntity>()).Where(predicate).AsNoTracking().ToList();
         }
 
         public void Update(TEntity entity)

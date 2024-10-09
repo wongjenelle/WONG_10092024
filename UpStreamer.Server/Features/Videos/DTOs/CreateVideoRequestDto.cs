@@ -1,6 +1,6 @@
 ﻿namespace UpStreamer.Server.Features.Videos.DTOs
 {
-    public class CreateVideoRequest
+    public class CreateVideoRequestDto
     {
         public string Title { get; init; }
         public string Description { get; init; }

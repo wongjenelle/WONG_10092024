@@ -1,12 +1,12 @@
 ﻿namespace UpStreamer.Server.Features.Videos.DTOs
 {
-    public class GetVideosResponse
+    public class GetVideosResponseDto
     {
-        public List<GetVideosObject> Videos { get; init; }
+        public List<GetVideosObjectDto> Videos { get; init; }
         public int Total { get; init; }
     }
 
-    public class GetVideosObject
+    public class GetVideosObjectDto
     {
         public string Id { get; init; }
         public string Title { get; init; }

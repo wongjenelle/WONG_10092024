@@ -1,14 +1,8 @@
 ﻿using AutoFixture.Xunit2;
 using FluentAssertions;
-using MediatR.Pipeline;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using UpStreamer.Server.Common.DTOs;
 using UpStreamer.Server.Common.Repository;
 using UpStreamer.Server.Database.Entities;
@@ -26,11 +20,12 @@ namespace UpStreamer.Test.Features.Videos.Handlers
         {
             // arrange
             var pagedParameters = new PagedDto { Skip = null, Take = null };
-            repository.Setup(x => x.GetList(It.IsAny<Expression<Func<Video, bool>>>(), It.IsAny<Func<IQueryable<Video>, IIncludableQueryable<Video, Category>>>()))
-                .Returns(VideoTestHelper.GetVideos().AsQueryable());
-            
+            repository.Setup(x => x.GetList(It.Is<Expression<Func<Video, bool>>>(x => true),
+                    It.IsAny<Func<IQueryable<Video>, IIncludableQueryable<Video, object>>>()))
+                .Returns(VideoTestHelper.GetVideos());
+
             // act
-            var sut = new GetVideosHandler(repository.Object);
+            var sut = new GetVideosHandler(repository.Object, new MockMapper().GetMapper());
             var result = await sut.Handle(new GetVideosQuery(pagedParameters), default);
 
             // assert
@@ -44,11 +39,13 @@ namespace UpStreamer.Test.Features.Videos.Handlers
         {
             // arrange
             var pagedParameters = new PagedDto { Skip = 0, Take = 15 };
-            repository.Setup(x => x.GetList(It.IsAny<Expression<Func<Video, bool>>>(), It.IsAny<Func<IQueryable<Video>, IIncludableQueryable<Video, Category>>>()))
-                .Returns(VideoTestHelper.GetVideos().AsQueryable());
+            repository.Setup(x => x.GetList(It.Is<Expression<Func<Video, bool>>>(x => true),
+                    It.IsAny<Func<IQueryable<Video>, IIncludableQueryable<Video, object>>>()))
+                .Returns(VideoTestHelper.GetVideos());
+
 
             // act
-            var sut = new GetVideosHandler(repository.Object);
+            var sut = new GetVideosHandler(repository.Object, new MockMapper().GetMapper());
             var result = await sut.Handle(new GetVideosQuery(pagedParameters), default);
 
             // assert
