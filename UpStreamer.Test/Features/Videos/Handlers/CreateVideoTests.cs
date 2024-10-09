@@ -1,21 +1,13 @@
 ﻿using AutoFixture.Xunit2;
 using FluentAssertions;
 using FluentValidation.TestHelper;
-using Microsoft.AspNetCore.Http;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.InteropServices.Marshalling;
-using System.Text;
-using System.Threading.Tasks;
 using UpStreamer.Server.Database;
 using UpStreamer.Server.Entities;
 using UpStreamer.Server.Features.Videos.DTOs;
 using UpStreamer.Server.Features.Videos.Handlers;
 using Xunit;
-using Xunit.Sdk;
 
 namespace UpStreamer.Test.Features.Videos.Handlers
 {

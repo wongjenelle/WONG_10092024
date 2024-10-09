@@ -1,8 +1,8 @@
 ﻿
 using FluentValidation;
 using System.Reflection;
-using UpStreamer.Server.Behaviors;
-using UpStreamer.Server.Features.Videos.Handlers;
+using UpStreamer.Server.Features.Files.Handlers;
+using UpStreamer.Server.Infrastructure.Middleware;
 
 namespace UpStreamer.Server.Infrastructure
 {
@@ -12,10 +12,10 @@ namespace UpStreamer.Server.Infrastructure
         {
             services.AddMediatR(cfg => {
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-                cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+                cfg.AddOpenBehavior(typeof(ValidationMiddleware<,>));
             });
             services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-            services.AddValidatorsFromAssemblyContaining<UploadVideoValidator>();
+            services.AddValidatorsFromAssemblyContaining<UploadFileValidator>();
 
             return services;
         }

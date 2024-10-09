@@ -7,9 +7,12 @@ namespace UpStreamer.Server.Entities
         [Key]
         public int Id { get; set; }
         [MaxLength(160)]
+        [Required]
         public required string Title { get; set; }
         [MaxLength(160)]
         public string? Description { get; set; }
+        public string? FilePath { get; set; }
+        public string? DisplayFileName { get; set; }
         public int? CategoryId { get; set; }
         public Category? Category { get; set; }
     }
