@@ -20,15 +20,15 @@ namespace UpStreamer.Server.Features.Videos.Handlers
         }
     }
 
-    public class CreateVideoCommand(CreateVideoRequest request) : IRequest<CreateVideoResponse>
+    public class CreateVideoCommand(CreateVideoRequestDto request) : IRequest<CreateVideoResponseDto>
     {
-        public CreateVideoRequest Request { get; private set; } = request;
+        public CreateVideoRequestDto Request { get; private set; } = request;
     }
 
     public class CreateVideoHandler(IGenericRepository<Video> videoRepo, IGenericRepository<Category> categoryRepo) : 
-        IRequestHandler<CreateVideoCommand, CreateVideoResponse>
+        IRequestHandler<CreateVideoCommand, CreateVideoResponseDto>
     {
-        public async Task<CreateVideoResponse> Handle(CreateVideoCommand command, CancellationToken cancellationToken)
+        public async Task<CreateVideoResponseDto> Handle(CreateVideoCommand command, CancellationToken cancellationToken)
         {
             var request = command.Request;
 

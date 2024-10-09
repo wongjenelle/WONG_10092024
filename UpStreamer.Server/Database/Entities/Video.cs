@@ -9,12 +9,11 @@ namespace UpStreamer.Server.Database.Entities
         [MaxLength(100)]
         [Required]
         public required string Title { get; set; }
-        [MaxLength(160)]
-        //[MaxLength(255)] //TODO: change
+        [MaxLength(255)]
         public string? Description { get; set; }
         [MaxLength(255)]
         public string? FilePath { get; set; }
-        public int? CategoryId { get; set; }
-        public Category? Category { get; set; }
+        public int CategoryId { get; set; }
+        public required Category Category { get; set; }
     }
 }

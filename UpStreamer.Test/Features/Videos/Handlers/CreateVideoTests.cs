@@ -16,7 +16,7 @@ namespace UpStreamer.Test.Features.Videos.Handlers
         [Fact]
         public void When_CreateRequestIsValid_Return_NoValidationError()
         {
-            var request = new CreateVideoRequest
+            var request = new CreateVideoRequestDto
             {
                 Title = "Title",
                 Description = "Description",
@@ -30,7 +30,7 @@ namespace UpStreamer.Test.Features.Videos.Handlers
         [Fact]
         public void When_CreateRequestHasExceededTextLimit_Return_ValidationError()
         {
-            var request = new CreateVideoRequest
+            var request = new CreateVideoRequestDto
             {
                 Title = new string('A', 101),
                 Description = new string('A', 161),
@@ -46,7 +46,7 @@ namespace UpStreamer.Test.Features.Videos.Handlers
         [Fact]
         public void When_CreateRequestHasEmptyTitle_Return_ValidationError()
         {
-            var request = new CreateVideoRequest
+            var request = new CreateVideoRequestDto
             {
                 Title = "",
                 Description = new string('A', 160),
@@ -64,7 +64,7 @@ namespace UpStreamer.Test.Features.Videos.Handlers
         public async Task When_CreateVideoUnsuccessful_Expect_NoDatabaseChanges(
             [Frozen] Mock<IGenericRepository<Video>> videoRepo, 
             [Frozen] Mock<IGenericRepository<Category>> categoryRepo, 
-            CreateVideoRequest request)
+            CreateVideoRequestDto request)
         {
             // arrange
             categoryRepo.Setup(x => x.Get(It.IsAny<Expression<Func<Category, bool>>>())).Throws<Exception>();
@@ -83,7 +83,7 @@ namespace UpStreamer.Test.Features.Videos.Handlers
         public async Task When_UploadSuccessful_Return_VideoId(
             [Frozen] Mock<IGenericRepository<Video>> videoRepo,
             [Frozen] Mock<IGenericRepository<Category>> categoryRepo,
-            CreateVideoRequest request)
+            CreateVideoRequestDto request)
         {
             // arrange
             categoryRepo.Setup(x => x.Get(It.IsAny<Expression<Func<Category, bool>>>())).Returns(new Category { Id = 1, Name = "category"});

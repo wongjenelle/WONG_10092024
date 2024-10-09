@@ -5,6 +5,7 @@ using System.Reflection;
 using UpStreamer.Server.Common.Repository;
 using UpStreamer.Server.Database;
 using UpStreamer.Server.Features.Files.Handlers;
+using UpStreamer.Server.Features.Videos.Profiles;
 using UpStreamer.Server.Infrastructure.Middleware;
 
 namespace UpStreamer.Server.Infrastructure
@@ -21,6 +22,7 @@ namespace UpStreamer.Server.Infrastructure
             services.AddValidatorsFromAssemblyContaining<UploadFileValidator>();
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
+            services.AddAutoMapper(typeof(VideoProfile));
 
             return services;
         }

@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using UpStreamer.Server.Common.DTOs;
 using UpStreamer.Server.Features.Videos.DTOs;
 using UpStreamer.Server.Features.Videos.Handlers;
 
@@ -14,9 +15,9 @@ namespace UpStreamer.Server.Controllers
         /// </summary>
         /// <returns>List of video metadata with pagination</returns>
         [HttpGet("list")]
-        public async Task<string> GetPaged()
+        public async Task<GetVideosResponseDto> GetPaged([FromQuery] PagedDto pagedParameters)
         {
-            return await mediator.Send(new GetVideosQuery());
+            return await mediator.Send(new GetVideosQuery(pagedParameters));
         }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace UpStreamer.Server.Controllers
         /// <param name="request"></param>
         /// <returns>ID of the created video</returns>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateVideoRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateVideoRequestDto request)
         {
             return Ok(await mediator.Send(new CreateVideoCommand(request)));
         }
