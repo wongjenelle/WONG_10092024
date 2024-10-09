@@ -1,21 +1,13 @@
 ﻿using AutoFixture.Xunit2;
 using FluentAssertions;
 using FluentValidation.TestHelper;
-using Microsoft.AspNetCore.Http;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.InteropServices.Marshalling;
-using System.Text;
-using System.Threading.Tasks;
-using UpStreamer.Server.Database;
-using UpStreamer.Server.Entities;
+using UpStreamer.Server.Common.Repository;
+using UpStreamer.Server.Database.Entities;
 using UpStreamer.Server.Features.Videos.DTOs;
 using UpStreamer.Server.Features.Videos.Handlers;
 using Xunit;
-using Xunit.Sdk;
 
 namespace UpStreamer.Test.Features.Videos.Handlers
 {
@@ -36,19 +28,35 @@ namespace UpStreamer.Test.Features.Videos.Handlers
         }
 
         [Fact]
-        public void When_CreateRequestHasInvalidData_Return_ValidationError()
+        public void When_CreateRequestHasExceededTextLimit_Return_ValidationError()
         {
             var request = new CreateVideoRequest
             {
-                Title = "",
+                Title = new string('A', 101),
                 Description = new string('A', 161),
                 Category = "Category"
             };
 
             var result = new CreateVideoValidator().TestValidate(new CreateVideoCommand(request));
             result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor(x => x.Request.Title);
+            result.ShouldHaveValidationErrorFor(x => x.Request.Title.Length);
             result.ShouldHaveValidationErrorFor(x => x.Request.Description.Length);
+        }
+
+        [Fact]
+        public void When_CreateRequestHasEmptyTitle_Return_ValidationError()
+        {
+            var request = new CreateVideoRequest
+            {
+                Title = "",
+                Description = new string('A', 160),
+                Category = "Category"
+            };
+
+            var result = new CreateVideoValidator().TestValidate(new CreateVideoCommand(request));
+            result.IsValid.Should().BeFalse();
+            result.ShouldHaveValidationErrorFor(x => x.Request.Title);
+            result.ShouldNotHaveValidationErrorFor(x => x.Request.Description.Length);
         }
 
         [Theory]

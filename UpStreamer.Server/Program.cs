@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using UpStreamer.Server.Database;
 using UpStreamer.Server.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +8,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<UpStreamerDbContext>(opt =>
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.ConfigureDatabase(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.ConfigureServices();
 
 var app = builder.Build();

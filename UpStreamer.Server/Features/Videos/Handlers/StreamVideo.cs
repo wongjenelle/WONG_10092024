@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
+﻿
 namespace UpStreamer.Server.Features.Videos.Handlers
 {
-    public class StreamVideo : Controller
+    public class StreamVideo
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
 
-namespace UpStreamer.Server.Behaviors
+namespace UpStreamer.Server.Infrastructure.Middleware
 {
-    public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
+    public class ValidationMiddleware<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : class
     {

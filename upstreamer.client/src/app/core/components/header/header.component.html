@@ -4,5 +4,5 @@
   </button>
   <span class="m-auto">UpStreamer</span>
   <span class="flex-auto"></span>
-  <button mat-flat-button [routerLink]="'/upload'">Upload</button>
+  <button mat-flat-button [routerLink]="'/upload'" *ngIf="!isUploadPage">Upload</button>
 </div>

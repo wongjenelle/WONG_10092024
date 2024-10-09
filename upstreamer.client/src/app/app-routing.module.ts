@@ -5,8 +5,9 @@ import { VideoUploadComponent } from './features/videos/components/video-upload/
 import { VideoDetailsComponent } from './features/videos/components/video-details/video-details.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'videos', pathMatch: 'full'},
   { path: 'videos', component: VideoListComponent },
-  { path: 'videos/details', component: VideoDetailsComponent },
+  { path: 'video-details/:id', component: VideoDetailsComponent },
   { path: 'upload', component: VideoUploadComponent }
 ];
 

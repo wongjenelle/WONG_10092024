@@ -2,7 +2,7 @@
 {
     public static class VideosConstants
     {
-        public static string FOLDER_UPLOAD => "Upload";
-        public static string DEFAULT_FILENAME=> "VideoFile";
+        public static readonly int MAXSIZE_DESCRIPTION = 160;
+        public static readonly int MAXSIZE_TITLE = 100;
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UpStreamer.Server.Entities;
+using UpStreamer.Server.Database.Entities;
 
 namespace UpStreamer.Server.Database
 {
