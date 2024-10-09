@@ -70,19 +70,18 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
       .upload(formData)
       .pipe(
         switchMap((uploadResult) => {
-          let request = this.createRequest.value;
-          request.filePath = uploadResult.filePath;
+          this.createRequest.value.filePath = uploadResult.filePath;
           return this.apiService.create(this.createRequest.value);
         }),
         takeUntil(this.unsubscribe$)
       )
       .subscribe({
-        next: (result) => {
+        next: (result) => { //TODO: strongly typed result
           this.snackBar.open(
             'Video uploaded successfully. Please wait.',
             'Close'
           );
-          this.router.navigateByUrl('/videos'); //TODO: navigate to actual video
+          this.router.navigate(['video-details', result.id]); 
         },
         error: (err: HttpErrorResponse) => {
           // TODO: create http request interceptor

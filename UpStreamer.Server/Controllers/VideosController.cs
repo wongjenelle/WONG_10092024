@@ -38,8 +38,7 @@ namespace UpStreamer.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateVideoRequest request)
         {
-            await mediator.Send(new CreateVideoCommand(request));
-            return Ok();
+            return Ok(await mediator.Send(new CreateVideoCommand(request)));
         }
     }
 }

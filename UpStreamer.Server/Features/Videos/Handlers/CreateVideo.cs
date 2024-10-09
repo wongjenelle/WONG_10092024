@@ -20,25 +20,26 @@ namespace UpStreamer.Server.Features.Videos.Handlers
         }
     }
 
-    public class CreateVideoCommand(CreateVideoRequest request) : IRequest<int>
+    public class CreateVideoCommand(CreateVideoRequest request) : IRequest<CreateVideoResponse>
     {
         public CreateVideoRequest Request { get; private set; } = request;
     }
 
-    public class CreateVideoHandler(IGenericRepository<Video> videoRepo, IGenericRepository<Category> categoryRepo) : IRequestHandler<CreateVideoCommand, int>
+    public class CreateVideoHandler(IGenericRepository<Video> videoRepo, IGenericRepository<Category> categoryRepo) : 
+        IRequestHandler<CreateVideoCommand, CreateVideoResponse>
     {
-        public async Task<int> Handle(CreateVideoCommand command, CancellationToken cancellationToken)
+        public async Task<CreateVideoResponse> Handle(CreateVideoCommand command, CancellationToken cancellationToken)
         {
             var request = command.Request;
 
             var category = categoryRepo.Get(x => x.Name.ToLower().Equals(request.Category.ToLower()));
             category ??= new Category { Name = request.Category };
 
-            var video = new Video { Title = request.Title, Description = request.Description, Category = category };
+            var video = new Video { Title = request.Title, Description = request.Description, Category = category, FilePath = request.FilePath };
             videoRepo.Create(video);
             videoRepo.Save();
 
-            return video.Id;
+            return new() { Id = video.Id };
         }
     }
 }
