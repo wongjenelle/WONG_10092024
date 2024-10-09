@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using UpStreamer.Server.Database;
 
-namespace UpStreamer.Server.Database
+namespace UpStreamer.Server.Common.Repository
 {
 
     public class GenericRepository<TEntity>(UpStreamerDbContext context) : IGenericRepository<TEntity> where TEntity : class
@@ -32,7 +33,7 @@ namespace UpStreamer.Server.Database
         {
             _context.Set<TEntity>().Update(entity);
             _context.SaveChanges();
-        }   
+        }
 
         public void Delete(TEntity entity)
         {

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace UpStreamer.Server.Database
+namespace UpStreamer.Server.Common.Repository
 {
     public interface IGenericRepository<T> where T : class
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UpStreamer.Server.Entities
+namespace UpStreamer.Server.Database.Entities
 {
     public class Video
     {
@@ -10,6 +10,7 @@ namespace UpStreamer.Server.Entities
         [Required]
         public required string Title { get; set; }
         [MaxLength(160)]
+        //[MaxLength(255)] //TODO: change
         public string? Description { get; set; }
         [MaxLength(255)]
         public string? FilePath { get; set; }

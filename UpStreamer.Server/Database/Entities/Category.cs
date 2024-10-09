@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace UpStreamer.Server.Entities
+namespace UpStreamer.Server.Database.Entities
 {
     [Index(nameof(Name), IsUnique = true)]
     public class Category

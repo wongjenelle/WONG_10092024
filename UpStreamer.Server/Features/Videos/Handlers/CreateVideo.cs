@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
-using UpStreamer.Server.Database;
-using UpStreamer.Server.Entities;
+using UpStreamer.Server.Common.Repository;
+using UpStreamer.Server.Database.Entities;
 using UpStreamer.Server.Features.Videos.Constants;
 using UpStreamer.Server.Features.Videos.DTOs;
 

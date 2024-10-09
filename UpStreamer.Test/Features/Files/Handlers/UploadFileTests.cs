@@ -13,18 +13,27 @@ namespace UpStreamer.Test.Features.Files.Handlers
         public void When_UploadRequestHasSingleFile_Return_NoValidationError()
         {
             var files = new FormFileCollection {
-                new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("File1")), 0, 1000, "Data", "file1.mp4")
+                new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("File1")), 0, 100000000, "Data", "file1.mp4")
             };
 
             var result = new UploadFileValidator().TestValidate(new UploadFileCommand(files));
             result.IsValid.Should().BeTrue();
         }
 
+
+        [Fact]
+        public void When_UploadRequestHasNoFiles_Return_ValidationError()
+        {
+            var result = new UploadFileValidator().TestValidate(new UploadFileCommand(new FormFileCollection()));
+            result.IsValid.Should().BeFalse();
+            result.ShouldHaveValidationErrorFor(x => x.Files);
+        }
+
         [Fact]
         public void When_UploadRequestHasSingleFileExceedingMaxLength_Return_ValidationError()
         {
             var files = new FormFileCollection {
-                new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("File1")), 0, 1001, "Data", "file1.mp4")
+                new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("File1")), 0, 100000001, "Data", "file1.mp4")
             };
 
             var result = new UploadFileValidator().TestValidate(new UploadFileCommand(files));
@@ -42,14 +51,6 @@ namespace UpStreamer.Test.Features.Files.Handlers
             var result = new UploadFileValidator().TestValidate(new UploadFileCommand(files));
             result.IsValid.Should().BeFalse();
             result.ShouldHaveValidationErrorFor(x => x.Files!.Count);
-        }
-
-        [Fact]
-        public void When_UploadRequestHasNoFiles_Return_ValidationError()
-        {
-            var result = new UploadFileValidator().TestValidate(new UploadFileCommand(new FormFileCollection()));
-            result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor(x => x.Files);
         }
 
         [Fact]

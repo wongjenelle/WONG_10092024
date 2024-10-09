@@ -2,6 +2,7 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using UpStreamer.Server.Common.Repository;
 using UpStreamer.Server.Database;
 using UpStreamer.Server.Features.Files.Handlers;
 using UpStreamer.Server.Infrastructure.Middleware;
@@ -18,6 +19,8 @@ namespace UpStreamer.Server.Infrastructure
             });
             services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
             services.AddValidatorsFromAssemblyContaining<UploadFileValidator>();
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddProblemDetails();
 
             return services;
         }
