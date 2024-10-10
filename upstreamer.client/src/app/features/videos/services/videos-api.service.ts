@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PagedRequest } from '../../shared/models/paged.model';
+import { PagedRequest } from '../../../shared/models/paged.model';
+import { VideoResponse } from './../components/models/video.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +12,8 @@ export class VideosApiService {
 
   constructor(private http: HttpClient) {}
 
-  // TODO: change to strongly typed
-
-  getPaged(request: PagedRequest): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/videos`, {params: request});
+  getPaged(request: PagedRequest): Observable<VideoResponse> {
+    return this.http.get<VideoResponse>(`${this.apiUrl}/videos/list`, {params: request});
   }
 
   upload(request: FormData): Observable<any> {

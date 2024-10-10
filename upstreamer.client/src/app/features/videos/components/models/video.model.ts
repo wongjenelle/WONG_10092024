@@ -3,6 +3,10 @@ export type Video = {
     title: string;
     description: string|null;
     category: string;
-    // thumbnail: string;
+    // thumbnail: string; // TODO: once thumbnail feature is available
   };
   
+export type VideoResponse = {
+    videos: Video[];
+    total: number;
+};
