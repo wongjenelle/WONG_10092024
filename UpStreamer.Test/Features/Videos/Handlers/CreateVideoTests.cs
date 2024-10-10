@@ -33,7 +33,7 @@ namespace UpStreamer.Test.Features.Videos.Handlers
             var request = new CreateVideoRequestDto
             {
                 Title = new string('A', 101),
-                Description = new string('A', 161),
+                Description = new string('A', 256),
                 Category = "Category"
             };
 
@@ -49,7 +49,7 @@ namespace UpStreamer.Test.Features.Videos.Handlers
             var request = new CreateVideoRequestDto
             {
                 Title = "",
-                Description = new string('A', 160),
+                Description = new string('A', 255),
                 Category = "Category"
             };
 

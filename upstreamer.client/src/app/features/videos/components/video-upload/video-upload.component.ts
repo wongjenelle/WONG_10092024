@@ -5,11 +5,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { CreateVideoForm } from '../models/upload-video.model';
+import { CreateVideoForm, CreateVideoResponse, UploadResult } from '../models/upload-video.model';
 import { CreateFormComponent } from './create-form/create-form.component';
 import { UploaderComponent } from './uploader/uploader.component';
-import { VideosApiService } from '../../videos-api.service';
 import { switchMap, takeUntil } from 'rxjs';
+import { VideosApiService } from '../../services/videos-api.service';
 
 @Component({
   selector: 'app-video-upload',
@@ -57,7 +57,7 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigateByUrl('/videos');
+    this.router.navigateByUrl('/video-list');
   }
 
   submit() {
@@ -66,19 +66,20 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', this.file);
 
+    // todo: move to video service
     this.apiService
       .upload(formData)
       .pipe(
-        switchMap((uploadResult) => {
-          this.createRequest.value.filePath = uploadResult.filePath;
+        switchMap((res: UploadResult) => {
+          this.createRequest.value.filePath = res.filePath;
           return this.apiService.create(this.createRequest.value);
         }),
         takeUntil(this.unsubscribe$)
       )
       .subscribe({
-        next: (result) => { //TODO: strongly typed result
+        next: (result: CreateVideoResponse) => { 
           this.snackBar.open(
-            'Video uploaded successfully. Please wait.',
+            'Video uploaded successfully!',
             'Close'
           );
           this.router.navigate(['video-details', result.id]); 
@@ -86,6 +87,7 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
         error: (err: HttpErrorResponse) => {
           // TODO: create http request interceptor
           if (err.status == 400) {
+            // TODO: display validation errors
             this.snackBar.open(err.message, 'Close');
           } else {
             this.snackBar.open(

@@ -2,7 +2,7 @@
 {
     public static class VideosConstants
     {
-        public static readonly int MAXSIZE_DESCRIPTION = 160;
+        public static readonly int MAXSIZE_DESCRIPTION = 255;
         public static readonly int MAXSIZE_TITLE = 100;
     }
 }

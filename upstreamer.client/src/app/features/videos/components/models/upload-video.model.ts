@@ -6,3 +6,11 @@ export type CreateVideoForm = {
   category: FormControl<string>;
   filePath: FormControl<string | null>;
 };
+
+export type CreateVideoResponse = {
+  id: number;
+}
+
+export type UploadResult = {
+  filePath: string;
+}
