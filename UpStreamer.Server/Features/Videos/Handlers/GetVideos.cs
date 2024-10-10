@@ -20,8 +20,9 @@ namespace UpStreamer.Server.Features.Videos.Handlers
         {
             var list = repository.GetList(predicate: x => true, include: x => x.Include(y => y.Category));
 
-            var filteredList = list.Skip(query.PagedParameters.Skip.GetValueOrDefault())
-                .Take(query.PagedParameters.Take.GetValueOrDefault(10));
+            var filteredList = list.OrderBy(x => x.Id)
+                .Skip(query.PagedParameters.Skip.GetValueOrDefault())
+                .Take(query.PagedParameters.Take.GetValueOrDefault());
 
             var pagedResult = new List<GetVideosObjectDto>();
             foreach(var item in filteredList)
