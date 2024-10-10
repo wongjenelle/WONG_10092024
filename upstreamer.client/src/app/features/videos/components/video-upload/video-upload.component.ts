@@ -57,7 +57,7 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigateByUrl('/videos');
+    this.router.navigateByUrl('/video-list');
   }
 
   submit() {

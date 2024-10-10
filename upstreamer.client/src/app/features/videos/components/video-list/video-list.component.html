@@ -1,14 +1,19 @@
-<div class="grid grid-cols-3 gap-3">
+<div class="grid grid-cols-3 gap-3 mt-5">
     <div *ngFor="let data of dataSource">
         <mat-card class="max-w-xl mb-5 cursor-pointer" appearance="outlined" (click)="navigate(data.id)">
             <mat-card-header>
             <mat-card-title-group>
                 <mat-card-title>{{data.title}}</mat-card-title>
-                <mat-card-subtitle>{{data.category}}</mat-card-subtitle>
-                <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" > <!-- replace with thumbanil-->
+                <mat-card-subtitle>
+                    <mat-chip-set>
+                        <mat-chip>{{data.category}}</mat-chip>
+                      </mat-chip-set>
+                </mat-card-subtitle>
+                <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" > 
+                <!--TODO: replace with thumbnail-->
             </mat-card-title-group>
             </mat-card-header>
-            <mat-card-content>
+            <mat-card-content class="text-left">
             {{data.description | truncate: 160 }}
             </mat-card-content>
         </mat-card>
