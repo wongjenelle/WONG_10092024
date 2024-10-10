@@ -9,19 +9,30 @@ import { MatChipsModule } from '@angular/material/chips';
 import { PagedRequest } from '../../../../shared/models/paged.model';
 import { takeUntil } from 'rxjs';
 import { VideosApiService } from '../../services/videos-api.service';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-video-list',
   templateUrl: './video-list.component.html',
   styleUrl: './video-list.component.css',
   standalone: true,
-  imports: [MatCardModule, NgFor, TruncatePipe, MatChipsModule],
+  imports: [
+    MatCardModule,
+    NgFor,
+    TruncatePipe,
+    MatChipsModule,
+    MatPaginatorModule,
+  ],
 })
 export class VideoListComponent extends BaseComponent implements OnInit {
   dataSource: Video[] = [];
+  total: number = 0;
+  pagedRequest: PagedRequest = {
+    skip: 0,
+    take: 15
+  };
 
-  constructor(private router: Router, 
-    private apiService: VideosApiService) {
+  constructor(private router: Router, private apiService: VideosApiService) {
     super();
   }
 
@@ -33,12 +44,21 @@ export class VideoListComponent extends BaseComponent implements OnInit {
     this.router.navigate([`video-details`, id]);
   }
 
+  handlePageChange(event: PageEvent) {
+    console.log(event);
+    this.pagedRequest.skip = event.pageIndex * event.pageSize;
+    this.pagedRequest.take = this.pagedRequest.skip + event.pageSize;
+
+    this.getVideos();
+  }
+
   getVideos(): void {
-    this.apiService.getPaged(<PagedRequest>{ skip: 0, take: 10 })
+    this.apiService
+      .getPaged(this.pagedRequest)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((result: VideoResponse) => {
         this.dataSource = result.videos;
-      }
-      );
+        this.total = result.total;
+      });
   }
 }

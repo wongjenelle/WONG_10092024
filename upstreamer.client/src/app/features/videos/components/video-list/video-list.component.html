@@ -19,3 +19,9 @@
         </mat-card>
     </div>
 </div>
+<mat-paginator #paginator
+            [length]="total"
+            [pageSize]="15"
+            [pageSizeOptions]="[15, 30, 60, 100]"
+            (page)="handlePageChange($event)">
+</mat-paginator>
