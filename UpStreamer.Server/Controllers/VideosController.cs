@@ -26,9 +26,9 @@ namespace UpStreamer.Server.Controllers
         /// <param name="id"></param>
         /// <returns>Video details</returns>
         [HttpGet("{id}")]
-        public string GetSingle(int id)
+        public async Task<GetVideoDetailResponseDto> GetSingle(int id)
         {
-            return $"hello {id}";
+            return await mediator.Send(new GetVideoDetailQuery(id));
         }
 
         /// <summary>
