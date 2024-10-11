@@ -10,3 +10,11 @@ export type VideoResponse = {
     videos: Video[];
     total: number;
 };
+
+export type VideoDetail = {
+  id: number;
+  title: string;
+  description: string|null;
+  category: string;
+  filePath: string;
+};

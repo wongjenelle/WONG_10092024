@@ -39,7 +39,7 @@ namespace UpStreamer.Server.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("UpStreamer.Server.Database.Entities.Video", b =>
@@ -70,7 +70,7 @@ namespace UpStreamer.Server.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Video");
+                    b.ToTable("Video", (string)null);
                 });
 
             modelBuilder.Entity("UpStreamer.Server.Database.Entities.Video", b =>
