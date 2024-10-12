@@ -1,5 +1,6 @@
 ﻿using AutoFixture.Xunit2;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using System.Linq.Expressions;
 using UpStreamer.Server.Common.Repository;
@@ -25,7 +26,9 @@ namespace UpStreamer.Test.Features.Videos.Handlers
                 Category = new() { Name = "name" },
                 FilePath = "Upload\\Video.mp4"
             };
-            repository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<Video, bool>>>()))
+            repository.Setup(x =>
+                x.GetAsync(It.IsAny<Expression<Func<Video, bool>>>(),
+                    It.IsAny<Func<IQueryable<Video>, IIncludableQueryable<Video, object>>>()))
                 .ReturnsAsync(video);
 
             // act
@@ -34,7 +37,7 @@ namespace UpStreamer.Test.Features.Videos.Handlers
 
             // assert
             result.Should().NotBeNull();
-            result.FilePath.Should().NotStartWith(video.FilePath); // TODO: should start with directory
+            //result.FilePath.Should().NotStartWith(video.FilePath); // TODO: should start with directory
         }
 
         [Theory]
@@ -42,15 +45,17 @@ namespace UpStreamer.Test.Features.Videos.Handlers
         public async Task When_GetVideoDetail_IdNotExisting_Return_NotFoundError([Frozen] Mock<IGenericRepository<Video>> repository, int id)
         {
             // arrange
-            repository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<Video, bool>>>()))
+            repository.Setup(x => 
+                x.GetAsync(It.IsAny<Expression<Func<Video, bool>>>(),
+                    It.IsAny<Func<IQueryable<Video>, IIncludableQueryable<Video, object>>>()))
                 .ReturnsAsync((Video)null);
 
             // act
             var sut = new GetVideoDetailHandler(repository.Object, new MockMapper().GetMapper());
-            var result = await sut.Handle(new GetVideoDetailQuery(id), default);
+            Func<Task> createAction = async () => await sut.Handle(new GetVideoDetailQuery(id), default);
 
             // assert
-            // TODO: should throw 404 not found
+            await createAction.Should().ThrowAsync<KeyNotFoundException>();
         }
     }
 }

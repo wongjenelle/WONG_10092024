@@ -7,7 +7,8 @@ namespace UpStreamer.Server.Common.Repository
     {
         void Create(T entity);
         T? Get(Expression<Func<T, bool>> predicate);
-        Task<T?> GetAsync(Expression<Func<T, bool>> predicate);
+        Task<T?> GetAsync(Expression<Func<T, bool>> predicate,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
         List<T> GetList(Expression<Func<T, bool>> predicate, 
             Func<IQueryable<T>, IIncludableQueryable<T,object>>? include = null);
         void Update(T entity);

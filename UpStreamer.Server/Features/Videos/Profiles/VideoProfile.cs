@@ -10,6 +10,9 @@ namespace UpStreamer.Server.Features.Videos.Profiles
         {
             CreateMap<Video, GetVideosObjectDto>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Name));
+            CreateMap<Video, GetVideoDetailResponseDto>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Name));
+
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using UpStreamer.Server.Common.Repository;
 using UpStreamer.Server.Database.Entities;
 using UpStreamer.Server.Features.Videos.DTOs;
@@ -17,16 +18,10 @@ namespace UpStreamer.Server.Features.Videos.Handlers
     {
         public async Task<GetVideoDetailResponseDto> Handle(GetVideoDetailQuery query, CancellationToken cancellationToken)
         {
-            // repository get by id
+            var video = await repository.GetAsync(predicate: x => x.Id == query.Id, include: x => x.Include(y => y.Category)) 
+                ?? throw new KeyNotFoundException();
 
-            var response = new GetVideoDetailResponseDto()
-            {
-                Id = 1,
-                Category = "Cat",
-                Description = "Description",
-                Title = "Title",
-                FilePath = "FilePath.mp4"
-            };
+            var response = mapper.Map<Video, GetVideoDetailResponseDto>(video);
 
             return response;
         }

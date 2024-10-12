@@ -43,7 +43,6 @@ namespace UpStreamer.Test.Features.Videos.Handlers
                     It.IsAny<Func<IQueryable<Video>, IIncludableQueryable<Video, object>>>()))
                 .Returns(VideoTestHelper.GetVideos());
 
-
             // act
             var sut = new GetVideosHandler(repository.Object, new MockMapper().GetMapper());
             var result = await sut.Handle(new GetVideosQuery(pagedParameters), default);
@@ -53,6 +52,25 @@ namespace UpStreamer.Test.Features.Videos.Handlers
             result.Total.Should().BeGreaterThan(10);
         }
 
-        
+        [Theory]
+        [InlineAutoData]
+        public async Task When_GetVideosHasNoResults_Return_EmptyPagedResult([Frozen] Mock<IGenericRepository<Video>> repository)
+        {
+            // arrange
+            var pagedParameters = new PagedDto { Skip = 0, Take = 15 };
+            repository.Setup(x => x.GetList(It.Is<Expression<Func<Video, bool>>>(x => true),
+                    It.IsAny<Func<IQueryable<Video>, IIncludableQueryable<Video, object>>>()))
+                .Returns([]);
+
+            // act
+            var sut = new GetVideosHandler(repository.Object, new MockMapper().GetMapper());
+            var result = await sut.Handle(new GetVideosQuery(pagedParameters), default);
+
+            // assert
+            result.Videos.Count.Should().Be(0);
+            result.Total.Should().Be(0);
+        }
+
+
     }
 }
