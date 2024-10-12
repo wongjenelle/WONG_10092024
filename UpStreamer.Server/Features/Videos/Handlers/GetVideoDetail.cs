@@ -14,7 +14,7 @@ namespace UpStreamer.Server.Features.Videos.Handlers
 
     }
 
-    public class GetVideoDetailHandler(IGenericRepository<Video> repository, IMapper mapper) : IRequestHandler<GetVideoDetailQuery, GetVideoDetailResponseDto>
+    public class GetVideoDetailHandler(IGenericRepository<Video> repository, IMapper mapper, IConfiguration configuration) : IRequestHandler<GetVideoDetailQuery, GetVideoDetailResponseDto>
     {
         public async Task<GetVideoDetailResponseDto> Handle(GetVideoDetailQuery query, CancellationToken cancellationToken)
         {
@@ -22,6 +22,16 @@ namespace UpStreamer.Server.Features.Videos.Handlers
                 ?? throw new KeyNotFoundException();
 
             var response = mapper.Map<Video, GetVideoDetailResponseDto>(video);
+
+            if (!string.IsNullOrEmpty(response.FilePath))
+            {
+                var uriBuilder = new UriBuilder(configuration["FileHostUrl"]!)
+                {
+                    Path =  response.FilePath
+                };
+                response.FilePath = uriBuilder.Uri.ToString();
+            }
+
 
             return response;
         }

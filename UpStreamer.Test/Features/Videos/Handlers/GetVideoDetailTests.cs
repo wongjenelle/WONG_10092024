@@ -1,6 +1,7 @@
 ﻿using AutoFixture.Xunit2;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using System.Linq.Expressions;
 using UpStreamer.Server.Common.Repository;
@@ -15,7 +16,9 @@ namespace UpStreamer.Test.Features.Videos.Handlers
     {
         [Theory]
         [InlineAutoData]
-        public async Task When_GetVideoDetail_IdExisting_Return_VideoDetails([Frozen] Mock<IGenericRepository<Video>> repository, int id)
+        public async Task When_GetVideoDetail_IdExisting_Return_VideoDetails([Frozen] Mock<IGenericRepository<Video>> repository,
+            [Frozen] Mock<IConfiguration> configuration,
+            int id)
         {
             // arrange
             var video = new Video()
@@ -26,32 +29,64 @@ namespace UpStreamer.Test.Features.Videos.Handlers
                 Category = new() { Name = "name" },
                 FilePath = "Upload\\Video.mp4"
             };
-            repository.Setup(x =>
-                x.GetAsync(It.IsAny<Expression<Func<Video, bool>>>(),
+            repository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<Video, bool>>>(),
                     It.IsAny<Func<IQueryable<Video>, IIncludableQueryable<Video, object>>>()))
                 .ReturnsAsync(video);
+            configuration.Setup(x => x["FileHostUrl"]).Returns("http://localhost:8080");
 
             // act
-            var sut = new GetVideoDetailHandler(repository.Object, new MockMapper().GetMapper());
+            var sut = new GetVideoDetailHandler(repository.Object, new MockMapper().GetMapper(), configuration.Object);
             var result = await sut.Handle(new GetVideoDetailQuery(id), default);
 
             // assert
             result.Should().NotBeNull();
-            //result.FilePath.Should().NotStartWith(video.FilePath); // TODO: should start with directory
+            result.FilePath.Should().NotStartWith(video.FilePath);
         }
 
         [Theory]
         [InlineAutoData]
-        public async Task When_GetVideoDetail_IdNotExisting_Return_NotFoundError([Frozen] Mock<IGenericRepository<Video>> repository, int id)
+        public async Task When_GetVideoDetail_HasNoFilePath_Return_VideoDetailsWithoutFilePath([Frozen] Mock<IGenericRepository<Video>> repository,
+            [Frozen] Mock<IConfiguration> configuration,
+            int id)
         {
             // arrange
-            repository.Setup(x => 
-                x.GetAsync(It.IsAny<Expression<Func<Video, bool>>>(),
+            var video = new Video()
+            {
+                Id = id,
+                Title = "title",
+                Description = "description",
+                Category = new() { Name = "name" },
+                FilePath = ""
+            };
+            repository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<Video, bool>>>(),
                     It.IsAny<Func<IQueryable<Video>, IIncludableQueryable<Video, object>>>()))
-                .ReturnsAsync((Video)null);
+                .ReturnsAsync(video);
+            configuration.Setup(x => x["FileHostUrl"]).Returns("http://localhost:8080");
 
             // act
-            var sut = new GetVideoDetailHandler(repository.Object, new MockMapper().GetMapper());
+            var sut = new GetVideoDetailHandler(repository.Object, new MockMapper().GetMapper(), configuration.Object);
+            var result = await sut.Handle(new GetVideoDetailQuery(id), default);
+
+            // assert
+            result.Should().NotBeNull();
+            result.FilePath.Should().BeEmpty();
+            configuration.Verify(x => x["FileHostUrl"], Times.Never());
+        }
+
+        [Theory]
+        [InlineAutoData]
+        public async Task When_GetVideoDetail_IdNotExisting_Return_NotFoundError([Frozen] Mock<IGenericRepository<Video>> repository,
+            [Frozen] Mock<IConfiguration> configuration,
+            int id)
+        {
+            // arrange
+            repository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<Video, bool>>>(),
+                    It.IsAny<Func<IQueryable<Video>, IIncludableQueryable<Video, object>>>()))
+                .ReturnsAsync((Video)null);
+            configuration.Setup(x => x["FileHostUrl"]).Returns("http://localhost:8080");
+
+            // act
+            var sut = new GetVideoDetailHandler(repository.Object, new MockMapper().GetMapper(), configuration.Object);
             Func<Task> createAction = async () => await sut.Handle(new GetVideoDetailQuery(id), default);
 
             // assert
