@@ -2,13 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from '../../../../shared/components/base/base.component';
 import { ActivatedRoute, Params } from '@angular/router';
 import { VideoDetail } from '../models/video.model';
-import { of, switchMap, takeUntil } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs';
+import { VideosApiService } from '../../services/videos-api.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-video-details',
   templateUrl: './video-details.component.html',
   styleUrl: './video-details.component.css',
   standalone: true,
+  imports: [NgIf]
 })
 export class VideoDetailsComponent extends BaseComponent implements OnInit {
   videoDetails: VideoDetail = {
@@ -20,7 +23,8 @@ export class VideoDetailsComponent extends BaseComponent implements OnInit {
   };
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private videoService: VideosApiService
   ) {
     super();
   }
@@ -39,13 +43,6 @@ export class VideoDetailsComponent extends BaseComponent implements OnInit {
   }
 
   getVideo(id: number) {
-    let vid = <VideoDetail>{
-      id: id,
-      title: 'My Video',
-      category: 'Personal',
-      filePath: 'http://localhost:8080\\Upload\\1728537578.mp4',
-    };
-
-    return of(vid); // todo: replace with api
-  }
+    return this.videoService.get(id);
+  } 
 }

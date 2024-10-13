@@ -1,12 +1,15 @@
  <div class="flex flex-col items-center space-y-6">
-   <div>
+   <div *ngIf="videoDetails.filePath">
       <video width="640" height="360" controls>
          <source src="{{videoDetails.filePath}}" type="video/mp4">
          <source src="{{videoDetails.filePath}}" type="video/avi">
          <source src="{{videoDetails.filePath}}" type="video/mov">
          Your browser does not support the video tag.
        </video>   
-   </div>   
+   </div>
+   <div *ngIf="!videoDetails.filePath">
+      <h2 class="text-red-500">Video not found!</h2>
+   </div>  
    <div>
       <p class="text-3xl">{{videoDetails.title}}</p>
       <p>{{videoDetails.description}}</p>
