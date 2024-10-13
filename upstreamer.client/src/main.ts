@@ -1,6 +1,3 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';

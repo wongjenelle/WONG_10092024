@@ -5,7 +5,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { CreateVideoForm, CreateVideoResponse, UploadResult } from '../models/upload-video.model';
+import {
+  CreateVideoForm,
+  CreateVideoRequest,
+  CreateVideoResponse,
+  UploadResult,
+} from '../models/upload-video.model';
 import { CreateFormComponent } from './create-form/create-form.component';
 import { UploaderComponent } from './uploader/uploader.component';
 import { switchMap, takeUntil } from 'rxjs';
@@ -41,12 +46,12 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      description: this.fb.control(null),
+      description: this.fb.control('', { nonNullable: true }),
       category: this.fb.control('', {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      filePath: this.fb.control(null),
+      filePath: this.fb.control('', { nonNullable: true }),
     });
   }
 
@@ -72,17 +77,14 @@ export class VideoUploadComponent extends BaseComponent implements OnInit {
       .pipe(
         switchMap((res: UploadResult) => {
           this.createRequest.value.filePath = res.filePath;
-          return this.apiService.create(this.createRequest.value);
+          return this.apiService.create(<CreateVideoRequest>this.createRequest.value);
         }),
         takeUntil(this.unsubscribe$)
       )
       .subscribe({
-        next: (result: CreateVideoResponse) => { 
-          this.snackBar.open(
-            'Video uploaded successfully!',
-            'Close'
-          );
-          this.router.navigate(['video-details', result.id]); 
+        next: (result: CreateVideoResponse) => {
+          this.snackBar.open('Video uploaded successfully!', 'Close');
+          this.router.navigate(['video-details', result.id]);
         },
         error: (err: HttpErrorResponse) => {
           // TODO: create http request interceptor

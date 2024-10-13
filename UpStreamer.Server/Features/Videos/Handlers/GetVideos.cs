@@ -22,7 +22,7 @@ namespace UpStreamer.Server.Features.Videos.Handlers
 
             var filteredList = list.OrderBy(x => x.Id)
                 .Skip(query.PagedParameters.Skip.GetValueOrDefault())
-                .Take(query.PagedParameters.Take.GetValueOrDefault());
+                .Take(query.PagedParameters.Take.GetValueOrDefault(10));
 
             var pagedResult = new List<GetVideosObjectDto>();
             foreach(var item in filteredList)
